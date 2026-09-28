@@ -145,7 +145,7 @@ Calibri and Cambria don't exist on Linux. Without matching font metrics, LibreOf
 
 ### 5. Defense-in-depth authorization
 
-- **Forced row-level security on every user table.** A dedicated hardening migration puts every table into a known-good state, after an audit found that Postgres silently ignores policies on tables where RLS was never enabled.
+- **Forced row-level security on every user table.** Postgres silently ignores policies on tables where RLS isn't enabled, so a dedicated hardening migration explicitly puts every table into a known-good state.
 - **Database triggers** enforce what policies can't:
   - no cross-user resume references,
   - tier-aware resume caps,
