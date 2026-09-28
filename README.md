@@ -12,6 +12,23 @@ Most AI resume tools generate a new document from extracted text, which destroys
 
 It also tracks the jobs a user has applied to and can draft cover letters on the Premium plan.
 
+<p align="center">
+  <img src="media/01-result.png" alt="Optimization result: match score before and after, verified keywords added, gaps, and page count preserved" width="820">
+</p>
+
+<table>
+  <tr>
+    <td width="50%"><img src="media/02-diff.png" alt="Before-and-after view of the original document edited in place"></td>
+    <td width="50%"><img src="media/03-tracker.png" alt="Jobs tracker with match improvement per application"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Before/after diff of the original document. Name, dates and education are protected.</sub></td>
+    <td align="center"><sub>Jobs tracker: each application with its tailored resume and match score.</sub></td>
+  </tr>
+</table>
+
+<sub>Screenshots use a demo account with fictional sample data.</sub>
+
 ## Architecture
 
 <p align="center">
