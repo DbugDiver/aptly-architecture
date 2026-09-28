@@ -1,0 +1,27 @@
+flowchart TB
+    U["Browser — Next.js 14 on Vercel<br/>pages · middleware (session + route guard)"]
+
+    subgraph SB["Supabase"]
+        AU["Auth<br/>email + Google OAuth"]
+        ST[("Storage<br/>private bucket")]
+        PG[("Postgres<br/>forced RLS")]
+    end
+
+    subgraph API["FastAPI on Railway (Docker)"]
+        R["Routers<br/>optimize · resumes · tracker<br/>cover letter · billing · admin"]
+        J["JWT verification (user routes)<br/>JWKS + key rotation"]
+        S["Services<br/>parse → rewrite → validate<br/>write-back → PDF → audit"]
+        R --> J --> S
+    end
+
+    LLM["Anthropic API"]
+    LO["LibreOffice + poppler<br/>DOCX → PDF, page count"]
+    STRIPE["Stripe<br/>Checkout · Portal · webhooks"]
+
+    U -->|"sign-in, direct upload,<br/>reads, signed URLs"| SB
+    U -->|"Bearer JWT"| R
+    S -->|"service role +<br/>ownership checks"| PG
+    S --> ST
+    S --> LLM
+    S --> LO
+    STRIPE -->|"signed webhook"| R

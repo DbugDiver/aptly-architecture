@@ -14,50 +14,11 @@ It also tracks the jobs a user has applied to and can draft cover letters on the
 
 ## Architecture
 
-```mermaid
-flowchart TB
-    subgraph Vercel["Vercel — Next.js 14 App Router"]
-        UI["Pages &amp; components<br/>dashboard · jobs · billing · admin"]
-        MW["Middleware<br/>session refresh + route guard"]
-        CB["Route handler<br/>OAuth callback"]
-    end
+<p align="center">
+  <img src="docs/architecture.png" alt="Aptly architecture: Next.js on Vercel, FastAPI on Railway, Supabase, Anthropic, Stripe, LibreOffice" width="760">
+</p>
 
-    subgraph API["FastAPI on Railway (Docker)"]
-        R1["/optimize"]
-        R2["/parse · /resumes · /tracker"]
-        R3["/cover-letter · /profile"]
-        R4["/billing · /stripe/webhook"]
-        R5["/admin"]
-        AUTH["JWT verify<br/>JWKS + HS256 fallback"]
-        SVC["Services layer<br/>parser · optimizer · writer<br/>PDF · quotas · audit"]
-    end
-
-    subgraph SB["Supabase"]
-        PG[("Postgres<br/>RLS forced")]
-        ST[["Storage<br/>private bucket"]]
-        AU["Auth"]
-    end
-
-    EXT1["Anthropic Messages API"]
-    EXT2["Stripe Checkout + Portal"]
-    EXT3["Resend"]
-    EXT4["PostHog"]
-    LO["LibreOffice headless<br/>+ poppler"]
-
-    UI -->|"auth, reads, upload, signed URLs"| SB
-    UI -->|"Bearer JWT over HTTPS"| API
-    CB --> AU
-    MW --> AU
-
-    R1 & R2 & R3 & R4 & R5 --> AUTH --> SVC
-    SVC -->|"service role"| PG
-    SVC -->|"download / upload / sign"| ST
-    SVC -->|"prompt-based calls"| EXT1
-    SVC --> LO
-    R4 <-->|"signed webhook"| EXT2
-    SVC --> EXT3
-    UI --> EXT4
-```
+<sub>Diagram source: [`docs/architecture.mmd`](docs/architecture.mmd)</sub>
 
 - **The browser talks to two services.** It goes to Supabase directly for auth, reads, uploads and signed URLs, and to the FastAPI backend for anything that needs a server secret or heavy document work.
 - **Privileged keys stay on the backend.** The Anthropic key, Stripe secret and Supabase service-role key never reach the client.
